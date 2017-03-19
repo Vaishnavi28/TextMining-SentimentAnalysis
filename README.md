@@ -264,5 +264,181 @@ r                         r  157
 sec                     sec  320
 wday                   wday  320
 
+### Word Frequencies:
+![alt tag](https://github.com/Vaishnavi28/TextMining-SentimentAnalysis/blob/master/Rplot-WordFrequencies.png)
 
-![alt tag](https://raw.githubusercontent.com/username/projectname/branch/path/to/img.png)
+## Association Mining:
+
+### which words are associated with 'r'?
+
+> findAssocs(tdm, "r", 0.2)
+
+example    code 
+   0.33    0.29 
+   
+### which words are associated with 'mining'?
+
+> findAssocs(tdm, "mining", 0.25)
+
+##data 		0.48
+##mahout 		0.30
+##recommendation 	0.30
+##sets 		0.30
+##supports 		0.30
+##frequent 		0.27
+##itemset 		0.26
+##PLotting using rgraphviz from bioconductors, since its removed from CRAN http://stackoverflow.com/questions/18023300/is-rgraphviz-no-longer-available-for-r
+source("http://bioconductor.org/biocLite.R")
+biocLite("Rgraphviz")
+library(graph)
+library(Rgraphviz)
+plot(tdm, term = freq.terms, corThreshold = 0.1, weighting = T, cex=1)
+
+#### Association Plot:
+
+![alt tag](https://github.com/Vaishnavi28/TextMining-SentimentAnalysis/blob/master/Rplot-AssociationGraph.png)
+
+## Word Cloud:
+
+library(wordcloud)
+m <- as.matrix(tdm)
+### calculate the frequency of words and sort it by frequency
+word.freq <- sort(rowSums(m), decreasing = T)
+#colors
+pal <- brewer.pal(9, "BuGn")
+pal <- pal[-(1:4)]
+### plot word cloud
+wordcloud(words = names(word.freq), freq = word.freq, min.freq = 4,
+
+                    random.order = F, colors = pal)
+#remove sparse terms
+tdm2 <- removeSparseTerms(tdm, sparse = 0.95)
+m2 <- as.matrix(tdm2)
+
+#### Word Cloud:
+
+![alt tag](https://github.com/Vaishnavi28/TextMining-SentimentAnalysis/blob/master/Rplot-WordCloud.png)
+
+•	Character, 0 and list are the centre of word cloud with biggest font. 
+•	Database, research,content,author, hour, year, day, application, knowledge, data are second largest in the word cloud
+•	While it is also seen that ‘mining’, ‘r’ that are highlighted in red are also part of the word cloud with slightly less populated.
+
+## Clustering:
+
+### Cluster Centre using kmeans:
+
+m3 <- t(m2) # transpose the matrix to cluster documents (tweets)
+set.seed(122)
+k <- 6 # number of clusters
+kmeansResult <- kmeans(m3, k)
+round(kmeansResult$centers, digits = 3) # cluster centers
+
+  description example heading hour    id isdst language  list mday meta
+  
+1           1   0.030       1    1 1.000     1    1.015 3.015    1    1
+2           1   0.231       1    1 1.000     1    1.000 3.077    1    1
+3           1   0.095       1    1 1.000     1    1.048 3.000    1    1
+4           1   0.065       1    1 1.013     1    1.013 3.000    1    1
+5           1   0.274       1    1 1.000     1    1.000 3.012    1    1
+6           1   0.000       1    1 1.000     1    1.000 3.000    1    1
+  min mon origin     r sec wday yday year analysis   big  data   use
+  
+1   1   1      1 0.197   1    1    1    1    0.136 0.136 1.015 0.015
+2   1   1      1 0.974   1    1    1    1    0.026 0.154 1.487 0.231
+3   1   1      1 0.286   1    1    1    1    0.857 0.000 0.048 0.095
+4   1   1      1 0.000   1    1    1    1    0.078 0.013 0.000 0.052
+5   1   1      1 1.190   1    1    1    1    0.083 0.000 0.024 0.143
+6   1   1      1 0.000   1    1    1    1    0.091 0.152 0.515 0.000
+
+
+  package  book mining network slides social computational application
+  
+1   0.015 0.015  0.409   0.000  0.091  0.000         0.061       0.076
+2   0.205 0.256  1.128   0.000  0.051  0.000         0.026       0.154
+3   0.095 0.000  0.095   0.952  0.095  0.810         0.000       0.000
+4   0.117 0.052  0.104   0.013  0.104  0.013         0.052       0.026
+5   0.190 0.048  0.107   0.036  0.167  0.000         0.107       0.024
+6   0.000 0.000  0.091   0.000  0.000  0.121         0.000       0.061
+
+  research position tutorial university    27    28    29    30
+  
+1    0.030    0.076    0.076      0.030 0.045 0.015 0.061 0.030
+2    0.026    0.000    0.000      0.000 0.051 0.103 0.051 0.051
+3    0.048    0.190    0.190      0.048 0.095 0.000 0.238 0.238
+4    0.013    0.039    0.052      0.091 0.013 0.052 0.000 0.039
+5    0.000    0.000    0.095      0.000 0.071 0.060 0.071 0.036
+6    0.970    0.667    0.000      0.424 0.091 0.091 0.030 0.091
+
+0 117    18 2    26 6 76 author character content datetimestamp
+
+1 7   1 1.045 2 1.015 1  1      1         6       1             1
+2 7   1 1.051 2 1.026 1  1      1         6       1             1
+3 7   1 1.048 2 1.000 1  1      1         6       1             1
+4 7   1 1.104 2 1.052 1  1      1         6       1             1
+5 7   1 1.012 2 1.036 1  1      1         6       1             1
+6 7   1 1.000 2 1.091 1  1      1         6       1             1
+
+### Cluster Dendrogram:
+##cluster terms
+distMatrix <- dist(scale(m2))
+fit <- hclust(distMatrix, method = "ward.D")
+plot(fit)
+rect.hclust(fit, k = 6) # cut tree into 6 clusters.
+
+#### Cluster Dendrogram:
+
+![alt tag](https://github.com/Vaishnavi28/TextMining-SentimentAnalysis/blob/master/Rplot-ClusterDendogram.png)
+
+#### Print the tweet of every Cluster:
+
+for (i in 1:k) {
++ cat(paste("cluster ", i, ": ", sep = ""))
++ s <- sort(kmeansResult$centers[i, ], decreasing = T)
++ cat(names(s)[1:5], "nn")
+
+#No of Clusters=6
+
+cluster 1: 0 character 
+cluster 2: analysis network social research network book application tutorial
+cluster 3: r data mining
+cluster 4: language id year yday wday mon mday meta hour heading datetime
+cluster 5: list 2 
+cluster 6: list 2
+
+Data seems to be clear and relevantly segmented within each cluster.
+
+## Topic Modelling:
+
+This is to find first topic identified in every tweet.
+
+> lda <- LDA(dtm, k = 8) # find 8 topics
+> (term <- terms(lda, 6)) # first 6 terms of every topic
+
+> term <- apply(term, MARGIN = 2, paste, collapse = ", ")
+> topic <- topics(lda, 1)
+> topics <- data.frame(date=as.IDate(tweets.df$created), topic)
+
+> topics <- data.frame(date=as.IDate(tweets.df$created), topic)
+> qplot(date, ..count.., data=topics, geom="density",
++       fill=term[topic], position="stack")
+
+#### Topic Modelling:
+
+![alt tag](https://github.com/Vaishnavi28/TextMining-SentimentAnalysis/blob/master/R-TopicModelling.png)
+
+Based on date in the x-axis and count in the y- axis, topics that are covered in every tweet are identified as shown above.
+
+## Inference:
+
+To conclude, the sentiment of the tweets is analyzed and is found that, it’s been more 
+confined with r, code, mining, computation, character, dates, package, analytics, university,
+scientist, research, position etc. This shows that the sentiment of people for user timeline in 
+Rdatamining relevantly hits the topic that is more confined with process of mining and days 
+they were tweeted about university, slides, materials, examples, clusters. 
+The overall sentiment of people’s mind seems to be positive and are involved to learn and 
+understand Data Analytics and Mining.
+
+
+
+
+
