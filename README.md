@@ -281,17 +281,29 @@ example    code
 > findAssocs(tdm, "mining", 0.25)
 
 ##data 		0.48
+
 ##mahout 		0.30
+
 ##recommendation 	0.30
+
 ##sets 		0.30
+
 ##supports 		0.30
+
 ##frequent 		0.27
+
 ##itemset 		0.26
+
 ##PLotting using rgraphviz from bioconductors, since its removed from CRAN http://stackoverflow.com/questions/18023300/is-rgraphviz-no-longer-available-for-r
+
 source("http://bioconductor.org/biocLite.R")
+
 biocLite("Rgraphviz")
+
 library(graph)
+
 library(Rgraphviz)
+
 plot(tdm, term = freq.terms, corThreshold = 0.1, weighting = T, cex=1)
 
 #### Association Plot:
@@ -308,6 +320,7 @@ word.freq <- sort(rowSums(m), decreasing = T)
 pal <- brewer.pal(9, "BuGn")
 pal <- pal[-(1:4)]
 ### plot word cloud
+Plot words with minimum frequency of 4:
 wordcloud(words = names(word.freq), freq = word.freq, min.freq = 4,
 
                     random.order = F, colors = pal)
@@ -336,46 +349,73 @@ round(kmeansResult$centers, digits = 3) # cluster centers
   description example heading hour    id isdst language  list mday meta
   
 1           1   0.030       1    1 1.000     1    1.015 3.015    1    1
+
 2           1   0.231       1    1 1.000     1    1.000 3.077    1    1
+
 3           1   0.095       1    1 1.000     1    1.048 3.000    1    1
+
 4           1   0.065       1    1 1.013     1    1.013 3.000    1    1
+
 5           1   0.274       1    1 1.000     1    1.000 3.012    1    1
+
 6           1   0.000       1    1 1.000     1    1.000 3.000    1    1
+
   min mon origin     r sec wday yday year analysis   big  data   use
   
 1   1   1      1 0.197   1    1    1    1    0.136 0.136 1.015 0.015
+
 2   1   1      1 0.974   1    1    1    1    0.026 0.154 1.487 0.231
+
 3   1   1      1 0.286   1    1    1    1    0.857 0.000 0.048 0.095
+
 4   1   1      1 0.000   1    1    1    1    0.078 0.013 0.000 0.052
+
 5   1   1      1 1.190   1    1    1    1    0.083 0.000 0.024 0.143
+
 6   1   1      1 0.000   1    1    1    1    0.091 0.152 0.515 0.000
 
 
   package  book mining network slides social computational application
   
 1   0.015 0.015  0.409   0.000  0.091  0.000         0.061       0.076
+
 2   0.205 0.256  1.128   0.000  0.051  0.000         0.026       0.154
+
 3   0.095 0.000  0.095   0.952  0.095  0.810         0.000       0.000
+
 4   0.117 0.052  0.104   0.013  0.104  0.013         0.052       0.026
+
 5   0.190 0.048  0.107   0.036  0.167  0.000         0.107       0.024
+
 6   0.000 0.000  0.091   0.000  0.000  0.121         0.000       0.061
+
 
   research position tutorial university    27    28    29    30
   
 1    0.030    0.076    0.076      0.030 0.045 0.015 0.061 0.030
+
 2    0.026    0.000    0.000      0.000 0.051 0.103 0.051 0.051
+
 3    0.048    0.190    0.190      0.048 0.095 0.000 0.238 0.238
+
 4    0.013    0.039    0.052      0.091 0.013 0.052 0.000 0.039
+
 5    0.000    0.000    0.095      0.000 0.071 0.060 0.071 0.036
+
 6    0.970    0.667    0.000      0.424 0.091 0.091 0.030 0.091
 
 0 117    18 2    26 6 76 author character content datetimestamp
 
 1 7   1 1.045 2 1.015 1  1      1         6       1             1
+
 2 7   1 1.051 2 1.026 1  1      1         6       1             1
+
 3 7   1 1.048 2 1.000 1  1      1         6       1             1
+
 4 7   1 1.104 2 1.052 1  1      1         6       1             1
+
 5 7   1 1.012 2 1.036 1  1      1         6       1             1
+
 6 7   1 1.000 2 1.091 1  1      1         6       1             1
 
 ### Cluster Dendrogram:
